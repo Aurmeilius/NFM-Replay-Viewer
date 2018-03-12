@@ -36,22 +36,20 @@ class Slider
 	
 	void draw(Graphics2D g, Color c, Color c2, int x, int y, int width)
 	{
-		if(ReplayViewer.clkHit || ReplayViewer.dragHit)
+		if(mouseR(x, y, width) && (ReplayViewer.clkHit || ReplayViewer.dragHit))
 		{
-			if(mouseR(x, y, width))
-			{
-				sldrVal = (ReplayViewer.mouseX - x - 4) / (float)(width - 7);
-				
-				if (sldrVal > 1)
-					sldrVal = 1;
-				if (sldrVal < 0)
-					sldrVal = 0;
-				
-				changing = true;
-			} else
-			{
-				changing = false;
-			}
+			sldrVal = (ReplayViewer.mouseX - x - 4) / (float)(width - 7);
+
+			if (sldrVal > 1)
+				sldrVal = 1;
+			if (sldrVal < 0)
+				sldrVal = 0;
+
+			changing = true;
+
+			if(ReplayViewer.clkHit)
+				ReplayViewer.clkHit = false;
+
 		} else
 		{
 			changing = false;

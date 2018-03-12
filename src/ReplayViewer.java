@@ -277,8 +277,8 @@ class ReplayViewer extends Canvas implements Runnable
 			mouseX = e.getX();
 			mouseY = e.getY();
 		}
-		
-		public void mousePressed(MouseEvent e)
+
+		public void mouseClicked(MouseEvent e)
 		{
 			clkHit = true;
 		}
@@ -286,13 +286,10 @@ class ReplayViewer extends Canvas implements Runnable
 		public void mouseDragged(MouseEvent e)
 		{
 			dragHit = true;
-			mouseX = e.getX();
-			mouseY = e.getY();
 		}
 		
 		public void mouseReleased(MouseEvent e)
 		{
-			clkHit = false;
 			dragHit = false;
 		}
 	};
@@ -802,7 +799,9 @@ class ReplayViewer extends Canvas implements Runnable
 	    		vx[0] = 0;
 		    	vy[0] = 0;
 		    	vz[0] = 1;
-		    	
+
+		    	/* Position Relative To Center */
+
 		    	vx[2] = 0;
 		    	vy[2] = -flipy[carsel] + 40;
 		    	vz[2] = 0;
@@ -953,7 +952,9 @@ class ReplayViewer extends Canvas implements Runnable
 		    	medium.x = (int) Math.round(aconto1[carsel].x - medium.cx - vx[2]);
 		        medium.z = (int) Math.round(aconto1[carsel].z - medium.cz - vz[2]);
 		        medium.y = (int) Math.round(aconto1[carsel].y - medium.cy - vy[2]);
-		        
+
+		        /* Converts From Rotational Matrix above to Euler Angles */
+
 		        medium.zy = (float)(Math.atan2(vy[0], Math.sqrt(vx[0] * vx[0] + vz[0] * vz[0])) * 57.295779513082320877D);
 		        medium.xz = (float)(face * 57.295779513082320877D);
 		        medium.xy = -(float)(Math.atan2(vz[1]*vx[0] - vx[1]*vz[0], vz[0]*vy[1]*vz[0] - vz[0]*vz[1]*vy[0] - vx[0]*vx[1]*vy[0] + vx[0]*vy[1]*vx[0]) * 57.295779513082320877D - 180);
@@ -1535,13 +1536,11 @@ class ReplayViewer extends Canvas implements Runnable
 		for(int i = 0; i < length.length; i++)
 		{
 			length[i] = fm.stringWidth(titles[i]);
-			
-			if(clkHit)
+
+			if(mouseR(7 + exp, length[i] + 12) && clkHit)
 			{
-				if(mouseR(7 + exp, length[i] + 12))
-				{
-					selTab = i;
-				}
+			    selTab = i;
+			    clkHit = false;
 			}
 			
 			if(i == selTab)
@@ -2578,6 +2577,8 @@ class ReplayViewer extends Canvas implements Runnable
                     });
 
                     frame1.addKeyListener(rply.kadapter);
+                    frame1.addMouseListener(rply.madapter);
+                    frame1.addMouseMotionListener(rply.madapter);
                     rply.addKeyListener(rply.kadapter);
                     rply.addMouseListener(rply.madapter);
                     rply.addMouseMotionListener(rply.madapter);
